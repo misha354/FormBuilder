@@ -10,5 +10,5 @@ if (!file_exists($argv[1])){
 
 $lexer = new FormLexer(file_get_contents($argv[1])); // parse command-line arg
 $parser = new FormParser($lexer);
-//$parser->elements(); // begin parsing at rule list
+$parser->form_elements(); // begin parsing at rule list
 print_r($parser->form);

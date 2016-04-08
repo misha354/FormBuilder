@@ -23,6 +23,6 @@ abstract class Parser {
     }
     
     public function consume() { $this->lookahead = $this->input->nextToken(); 
-        //print_r($this->lookahead);
+        print_r("Lookahead is " . $this->lookahead);
          }
 }

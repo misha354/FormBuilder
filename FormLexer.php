@@ -3,17 +3,16 @@
 class FormLexer extends Lexer
 {
 
+    const QUOTED_STRING = 1;
     const SINGLE_LINE_TEXT = 2;
     const MULTI_LINE_TEXT = 3;
-    const MULTIPLE_CHOICE = 3;
-    const CHOICE = 4;
-    const TEXT = 5;
+    const MULTIPLE_CHOICE = 4;
+    const CHOICE = 5;
     const SUBMIT = 6;
-    const QUOTE = 7;
 
-    private $tokenNames = array("n/a", "<EOF>", "SINGLE_LINE_TEXT", "MULTI_LINE_TEXT", "MULTIPLE_CHOICE", "CHOICE",
-        "TEXT", "SUBMIT", "QUOTE");
-    private $keywords = array("SINGLE_LINE_TEXT", "MULTI_LINE_TEXT", "MULTIPLE_CHOICE", "CHOICE", "SUBMIT");
+    public static $tokenNames = array("n/a", "<EOF>", "SINGLE_LINE_TEXT", "MULTI_LINE_TEXT", "MULTIPLE_CHOICE", "CHOICE",
+        "QUOTED_STRING", "SUBMIT" );
+    public static $keywords = array("SINGLE_LINE_TEXT", "MULTI_LINE_TEXT", "MULTIPLE_CHOICE", "CHOICE", "SUBMIT");
 
     public function getTokenName($x)
     {
@@ -80,8 +79,8 @@ class FormLexer extends Lexer
             $this->LETTERorUNDERSCORE();
         } while ($this->isLETTER() || $this->isUNDERSCORE());
         
-        if (in_array ( $buf, $this->keywords)){        
-            return new Token(array_search($buf, $this->tokenNames), $buf);
+        if (in_array ( $buf, static::$keywords)){        
+            return new Token(array_search($buf, static::$tokenNames), $buf);
         }
         else {
             throw new Exception("Unknown keyword $buf");
