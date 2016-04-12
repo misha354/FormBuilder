@@ -3,12 +3,14 @@
 class FormLexer extends Lexer
 {
 
-    const QUOTED_STRING = 1;
+    const EOF_TYPE = 1;
     const SINGLE_LINE_TEXT = 2;
     const MULTI_LINE_TEXT = 3;
     const MULTIPLE_CHOICE = 4;
     const CHOICE = 5;
-    const SUBMIT = 6;
+    const QUOTED_STRING = 6;
+    const SUBMIT = 7;
+
 
     public static $tokenNames = array("n/a", "<EOF>", "SINGLE_LINE_TEXT", "MULTI_LINE_TEXT", "MULTIPLE_CHOICE", "CHOICE",
         "QUOTED_STRING", "SUBMIT" );
@@ -16,7 +18,7 @@ class FormLexer extends Lexer
 
     public function getTokenName($x)
     {
-        return $this->tokenNames[$x];
+        return static::$tokenNames[$x];
     }
 
     public function __construct($input)
@@ -32,41 +34,54 @@ class FormLexer extends Lexer
     public function nextToken()
     {
         while ($this->c != static::EOF) {
+/*            echo "inside big while nexttoken ord c is ". ord($this->c) . "\n";
+            if (ord($this->c) == 13){
+                echo "inside if calling ws\n";
+                $this->WS();
+                continue;
+            }*/ 
+
             switch ($this->c) {
                 case ' ':
                 case "\t":
                 case "\n":
                 case "\r":
+//                    echo "got here inside whitespace case\n";
                     $this->WS();
                     continue;
                 case '"':
-                    $this->QUOTED_STRING();
+                    return $this->QUOTED_STRING();
                 default:
                     return $this->KEYWORD();
             }
         }
-        return new Token(EOF_TYPE, "<EOF>");
+        return new Token(static::EOF_TYPE, "<EOF>");
     }
 
     public function WS()
     {
+//        echo "consuming whitespace\n";
         while ($this->c == ' ' || $this->c == "\t" || $this->c == "\n" || $this->c == "\r")
             $this->consume();
     }
 
     public function QUOTED_STRING()
     {
+    //    echo "in quoted_string\n";
         $this->consume();
         $buf = "";
         while (!$this->isQUOTE()) {
             $buf .= $this->c;
+            
             $this->consume();
             if ($this->c == ($this->isEOL() || $this->isEOF())) {
                 throw new Exception("Unterminated string");
-            }
-            $this->consume();
-            return new Token(QUOTED_STRING, $buf);
+            }            
         }
+        $this->consume();
+  //      echo "quoted string is returning $buf, ord c is ". ord($this->c)."\n";
+        return new Token(static::QUOTED_STRING, $buf);
+
     }
 
     public function KEYWORD()
@@ -74,6 +89,7 @@ class FormLexer extends Lexer
         $buf = "";
 
         do {
+//            echo "keyword() buf is $buf\n";
             $buf .= $this->c;
 
             $this->LETTERorUNDERSCORE();

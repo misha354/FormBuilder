@@ -13,16 +13,17 @@ abstract class Parser {
     protected $lookahead; // the current lookahead token
     
     public function __construct(Lexer $input) {
+//        echo "parser constructor called\n";
         $this->input = $input; 
         $this->consume();
         }
     /** If lookahead token type matches x, consume & return else error */
     public function match($x) {
         if ( $this->lookahead->type == $x ) $this->consume();
-        else throw new Error("expecting {$this->input->getTokenName($x)}; found $this->lookahead");
+        else throw new Exception("expecting {$this->input->getTokenName($x)}; found $this->lookahead");
     }
     
     public function consume() { $this->lookahead = $this->input->nextToken(); 
-        print_r("Lookahead is " . $this->lookahead);
+        print_r("Lookahead is " . $this->lookahead . "\n");
          }
 }

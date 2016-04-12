@@ -71,6 +71,6 @@ class FormParser extends Parser {
     
     public function submit(){
         $this->match(FormLexer::SUBMIT);
-        return new Submit($this->quoted_string);
+        return new Submit($this->quoted_string());
     }            
 }

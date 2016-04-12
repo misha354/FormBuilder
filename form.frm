@@ -1,2 +1,2 @@
-SINGLE_LINE_TEXT 
-SUBMIT
+SINGLE_LINE_TEXT "temperature"
+SUBMIT "Click me"
