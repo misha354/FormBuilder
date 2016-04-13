@@ -10,6 +10,9 @@ abstract class Lexer {
     protected $p = 0; //index into input of current character
     
     public function __construct($input){
+        if (empty($input)){
+            throw new Exception(' Empty input file ' );
+        }
         $this->input = $input;
         $this->c = $this->input[$this->p];
         $this->inputLength = strlen($input);
