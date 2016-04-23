@@ -36,9 +36,9 @@ class FormParser extends Parser {
         else if ($this->lookahead->type == FormLexer::MULTIPLE_CHOICE){
             return $this->multiple_choice();
         }
-      /*  else{
-            throw new Exception("Expected a form element, found $this->lookahead->text");
-        }*/        
+        else{
+            $this->throwException("Expected one of {SINGLE_LINE_INPUT, MULTI_LINE_INPUT, MULTIPLE_CHOICE}. Found $this->lookahead.");
+        }
     }
     
     public function single_line_text(){

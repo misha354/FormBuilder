@@ -20,10 +20,16 @@ abstract class Parser {
     /** If lookahead token type matches x, consume & return else error */
     public function match($x) {
         if ( $this->lookahead->type == $x ) $this->consume();
-        else throw new Exception("expecting {$this->input->getTokenName($x)}; found $this->lookahead. Line: ". $this->input->getLineNumber());
+        else $this->throwException("expecting {$this->input->getTokenName($x)}; found $this->lookahead.");
     }
     
-    public function consume() { $this->lookahead = $this->input->nextToken(); 
-        print_r("Lookahead is " . $this->lookahead . "\n");
+    public function consume() { 
+        $this->lookahead = $this->input->nextToken(); 
+//        print_r("Lookahead is " . $this->lookahead . "\n");
+         }
+
+    protected function throwException($message){
+        throw new Exception("$message Line: ". $this->input->getLineNumber());
+
          }
 }

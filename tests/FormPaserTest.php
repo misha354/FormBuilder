@@ -50,10 +50,52 @@ EOD;
      * @expectedException        Exception
      * @expectedExceptionMessage expecting SUBMIT; found <'Click me', QUOTED_STRING>. Line: 2
      */
-    public function testMissingSubmit(){
+    public function testMissingSubmitName(){
         $text = <<<EOD
 SINGLE_LINE_TEXT "temperature"
 "Click me"
+EOD;
+
+    $this->parse($text);
+
+    }
+
+    /**
+     * @expectedException        Exception
+     * @expectedExceptionMessage expecting SUBMIT; found <'End-Of-File', <EOF>>. Line: 1
+     */
+    public function testMissingSubmit(){
+        $text = <<<EOD
+SINGLE_LINE_TEXT "temperature"
+EOD;
+
+    $this->parse($text);
+
+    }
+
+
+    /**
+     * @expectedException        Exception
+     * @expectedExceptionMessage Expected one of {SINGLE_LINE_INPUT, MULTI_LINE_INPUT, MULTIPLE_CHOICE}. Found <'temperature', QUOTED_STRING>. Line: 1
+     */
+    public function testMissingFormElementType()
+    {
+        $text = <<<EOD
+"temperature"
+SUBMIT "Click me"
+EOD;
+
+    $this->parse($text);
+    }
+
+    /**
+     * @expectedException        Exception
+     * @expectedExceptionMessage expecting QUOTED_STRING; found <'SUBMIT', SUBMIT>. Line: 2
+     */
+    public function testMissingSingleLineTextName(){
+$text = <<<EOD
+SINGLE_LINE_TEXT 
+SUBMIT "Click me"
 EOD;
 
     $this->parse($text);
