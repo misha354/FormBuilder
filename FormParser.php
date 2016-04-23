@@ -1,5 +1,10 @@
 <?php
 
+/*
+TODO:
+1. Title and Description
+2. Sections
+*/
 class FormParser extends Parser {
     public $form = array();
     
