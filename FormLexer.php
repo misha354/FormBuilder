@@ -55,7 +55,7 @@ class FormLexer extends Lexer
                     return $this->KEYWORD();
             }
         }
-        return new Token(static::EOF_TYPE, "<EOF>");
+        return new Token(static::EOF_TYPE, "End-Of-File");
     }
 
     public function WS()
@@ -75,7 +75,7 @@ class FormLexer extends Lexer
             
             $this->consume();
             if ($this->c == ($this->isEOL() || $this->isEOF())) {
-                throw new Exception("Unterminated string");
+                throw $this->throwException("Unterminated string.");
             }            
         }
         $this->consume();
@@ -99,7 +99,8 @@ class FormLexer extends Lexer
             return new Token(array_search($buf, static::$tokenNames), $buf);
         }
         else {
-            throw new Exception("Unknown keyword $buf");
+            $this->columnNumber -= strlen($buf);
+            $this->throwException("Unknown keyword $buf.");
         }
     }
 
@@ -113,13 +114,13 @@ class FormLexer extends Lexer
         return ($this->c == "\r" || $this->c == "\n");
     }
 
-    public function isWS()
+   /* public function isWS()
     {
         return $this->c == ' ' ||
                 $this->c == "\t" ||
                 $this->c == "\n" ||
                 $this->c == "\r";
-    }
+    }*/
 
     public function isLETTER()
     {
@@ -137,7 +138,7 @@ class FormLexer extends Lexer
         if ($this->isLETTER() || $this->isUNDERSCORE()) {
             $this->consume();
         } else {
-            throw new Exception("expecting LETTER or UNDERSCORE; found $this->c");
+            $this->throwException("expecting LETTER or UNDERSCORE; found $this->c.");
         }
     }
 
