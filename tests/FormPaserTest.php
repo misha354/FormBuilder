@@ -68,9 +68,11 @@ EOD;
 
         $expected = array();
         $expected[0] = new SingleLineText("temperature");
-        $expected[2] = new Submit("Click me");
+        $expected[1] = new Submit("Click me");
 
-        $this->parse($text);
+        $this->parse();
+
+        $this->assertEquals($expected, $this->formParser->form);
     }
 
 }

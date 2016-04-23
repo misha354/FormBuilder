@@ -11,26 +11,30 @@ class FormParser extends Parser {
     public function __construct (Lexer $input) { 
         parent::__construct($input);
     }
+
+    private function addElement($element){
+        $this->form[] = $element;
+    }
     
     public function form_elements(){
         do {
-            $this->form[] = $this->form_element();
+            $this->addElement($this->form_element());
         } while ($this->lookahead->type == FormLexer::SINGLE_LINE_TEXT ||
                $this->lookahead->type == FormLexer::MULTI_LINE_TEXT ||
                $this->lookahead->type == FormLexer::MULTIPLE_CHOICE );
                 
-        $this->form[] = $this->submit();        
+        $this->addElement($this->submit());        
     }
     
-    public function form_element(){
+    public function form_element(){        
         if ($this->lookahead->type == FormLexer::SINGLE_LINE_TEXT){
-            $this->form[] = $this->single_line_text();
+            return $this->single_line_text();
         }
         else if ($this->lookahead->type == FormLexer::MULTI_LINE_TEXT){
-            $this->form[] = $this->multi_line_text();
+            return $this->multi_line_text();
         }
         else if ($this->lookahead->type == FormLexer::MULTIPLE_CHOICE){
-            $this->form[] = $this->multiple_choice();
+            return $this->multiple_choice();
         }
       /*  else{
             throw new Exception("Expected a form element, found $this->lookahead->text");
